@@ -1,6 +1,5 @@
 package com.example.homework1
 
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -59,19 +58,12 @@ class RegistrationActivity : AppCompatActivity() {
 
 
 
-            AsyncTask.execute {
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java,
-                    getString(R.string.dbFileName)
-                ).build()
-                val uuid = db.userDao().insert(userInfo).toInt()
-                db.close()
+
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+            db.userDao().insert(userInfo).toInt()
+            db.close()
 
 
-                // Need to pop out account create success
-                // Check if username existed
-            }
             finish()
         }
     }

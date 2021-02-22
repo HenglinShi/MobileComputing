@@ -54,22 +54,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <EditText
-            android:id="@+id/txtTaskName"
-            android:layout_width="381dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="84dp"
-            android:background="@drawable/textbox_shape"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="Reminder Name"
-            android:inputType="textPersonName"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
@@ -228,6 +212,16 @@
             app:layout_constraintHorizontal_bias="0.155"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/reminderImageCreate"
+            android:layout_width="111dp"
+            android:layout_height="101dp"
+            android:layout_marginTop="56dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_account_box" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

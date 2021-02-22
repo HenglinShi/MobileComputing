@@ -2,7 +2,6 @@ package com.example.homework1
 
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +12,7 @@ import androidx.room.Room
 import com.example.homework1.db.AppDatabase
 import com.example.homework1.databinding.ActivityLoginBinding
 import com.example.homework1.db.UserInfo
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     //var currentUsername: String = null
     //var currentPassword: String = null
-    var userInfos = listOf<UserInfo>()
+    //var userInfos = listOf<UserInfo>()
     //private var uid by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,33 +47,29 @@ class LoginActivity : AppCompatActivity() {
                 getString(R.string.sharedPreference),
                 Context.MODE_PRIVATE).edit().putInt("LoginStatus", 1).apply()
 
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
-                    var currentUserName = binding.txtUsername.text.toString()
-                    userInfos = db.userDao().getUserInfos(username = currentUserName)
-                }
-            }
+            //GlobalScope.launch {
+                //withContext(Dispatchers.Main) {
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+            var currentUserName = binding.txtUsername.text.toString()
+            var userInfo = db.userDao().getUserInfo(username = currentUserName)
+            //    }
+            //}
 
 
-                // todo check if username exists
-
-
-
-
-            if (userInfos.isNotEmpty()) {
-                if (userInfos[0].password== binding.txtPassword.text.toString()) {
+            if (userInfo != null){ //s.isNotEmpty()) {
+                if (userInfo.password== binding.txtPassword.text.toString()) {
                     //login success
 
-                    applicationContext.getSharedPreferences(
-                        getString(R.string.sharedPreference),
-                        Context.MODE_PRIVATE).edit().putString("currentUsername", userInfos[0].username).apply()
 
+                    var gson = Gson()
+                    var json = gson.toJson(userInfo)
+                    applicationContext.getSharedPreferences(
+                            getString(R.string.sharedPreference),
+                            Context.MODE_PRIVATE).edit().putString("currentUser", json).apply()
 
                     startActivity(
                         Intent(applicationContext, MainActivity::class.java)
                     )
-
                 }
                 else{
                     Toast.makeText(applicationContext, "password incorrect", Toast.LENGTH_SHORT).show()

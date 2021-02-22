@@ -30,7 +30,7 @@ abstract class AppDatabase:RoomDatabase() {
          synchronized(this) {
             val instance = Room.databaseBuilder(context,
                      AppDatabase::class.java,
-                     dbFileName).build()
+                     dbFileName).allowMainThreadQueries().build()
 
             INSTANCE = instance
             return instance

@@ -1,7 +1,6 @@
 package com.example.homework1
 
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.room.Room
@@ -45,19 +44,11 @@ class ModifyReminderActivity : AppCompatActivity() {
                 creation_time = binding.txtCreatedDate.text.toString(),
                 reminder_time = binding.txtDate.text.toString()
             )
-            AsyncTask.execute {
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java,
-                    getString(R.string.dbFileName)
-                ).build()
-                val uuid = db.reminderDao().updateReminder(remind2Update)//.toInt()
-                db.close()
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+            val uuid = db.reminderDao().updateReminder(remind2Update)//.toInt()
+            db.close()
 
 
-                // Need to pop out account create success
-                // Check if username existed
-            }
             finish()
         }
 

@@ -1,17 +1,19 @@
 package com.example.homework1
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.room.Room
 import com.example.homework1.db.AppDatabase
 import com.example.homework1.databinding.ActivityCreateReminderBinding
 import com.example.homework1.db.ReminderInfo
 import com.example.homework1.db.TaskInfo
 import com.example.homework1.db.UserInfo
+import com.google.gson.Gson
 import java.time.LocalDateTime
 import java.util.*
 
@@ -19,7 +21,10 @@ class CreateReminderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateReminderBinding
 
-    var currentUserInfo = listOf<UserInfo>()
+    val REQUEST_CODE = 100
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_create_reminder)
@@ -30,42 +35,56 @@ class CreateReminderActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnReturn.setOnClickListener {
-            startActivity(
-                Intent(applicationContext, MainActivity::class.java)
-            )
+            startActivity(Intent(applicationContext, MainActivity::class.java))
+        }
 
+        //binding.reminderImage.setClick
+        binding.reminderImageCreate.setOnClickListener{
+
+            val builder = AlertDialog.Builder(this@CreateReminderActivity)
+            builder.setTitle("Add image")
+                .setNegativeButton("Gallery") { _, _ ->
+                    var galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+                    galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
+                    galleryIntent.setType("image/*")
+                    startActivityForResult(galleryIntent, REQUEST_CODE)
+
+                }
+                .setPositiveButton("Camera"){ _, _ ->
+
+                }
+                .show()
+
+
+
+
+
+
+
+
+
+
+            return@setOnClickListener
         }
         binding.btnAccept.setOnClickListener {
             // Adding new reminder
 
-            if (binding.txtTaskName.text.isEmpty()) {
-                Toast.makeText(
-                    applicationContext,
-                    "Task bane should not be empty",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
             if (binding.txtDate.text.isEmpty()) {
 
                 return@setOnClickListener
             }
 
-            val currentUsername = applicationContext.getSharedPreferences(
+            val gson = Gson()
+            val json = applicationContext.getSharedPreferences(
                 getString(R.string.sharedPreference),
-                Context.MODE_PRIVATE
-            ).getString("currentUsername", " ").toString()
+                Context.MODE_PRIVATE).getString("currentUser", "")
+
+            var currentUser = gson.fromJson(json, UserInfo::class.java)
 
 
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                getString(R.string.dbFileName)
-            ).allowMainThreadQueries().build()
 
 
-            currentUserInfo = db.userDao().getUserInfos(username = currentUsername)
-            db.close()
+
 
 
 
@@ -78,7 +97,7 @@ class CreateReminderActivity : AppCompatActivity() {
                 //taskdesc = binding.txtTaskDesc.text.toString(),
                 //duedate = binding.txtDate.text.toString()
                 message = binding.txtTaskDesc.text.toString(),
-                creator_id = currentUserInfo[0].uid,
+                creator_id = currentUser.uid,
                 location_x = binding.txtLocationX.text.toString().toDouble(),
                 location_y = binding.txtLocationY.text.toString().toDouble(),
                 reminder_see = false,
@@ -88,19 +107,10 @@ class CreateReminderActivity : AppCompatActivity() {
             )
 
 
-            AsyncTask.execute {
-                //save payment to room datbase
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java,
-                    getString(R.string.dbFileName)
-                ).build()
-                // TODO
-                // TODO THE DATA INSERT
-                val uuid = db.reminderDao().insert(reminder).toInt()
-                db.close()
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+            db.reminderDao().insert(reminder).toInt()
+            db.close()
 
-            }
 
             Toast.makeText(
                 applicationContext,
@@ -116,6 +126,13 @@ class CreateReminderActivity : AppCompatActivity() {
 
 
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
+            binding.reminderImageCreate.setImageURI(data?.data) // handle chosen image
+        }
     }
 
 

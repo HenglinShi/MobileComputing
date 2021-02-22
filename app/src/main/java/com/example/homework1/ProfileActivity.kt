@@ -2,7 +2,6 @@ package com.example.homework1
 
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -10,6 +9,7 @@ import androidx.room.Room
 import com.example.homework1.databinding.ActivityProfileBinding
 import com.example.homework1.db.AppDatabase
 import com.example.homework1.db.UserInfo
+import com.google.gson.Gson
 import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
@@ -21,32 +21,17 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         //setContentView(R.layout.activity_profile)
 
-
-        val currentUsername = applicationContext.getSharedPreferences(
+        val mgson = Gson()
+        val json = applicationContext.getSharedPreferences(
             getString(R.string.sharedPreference),
-            Context.MODE_PRIVATE
-        ).getString("currentUsername", " ").toString()
+            Context.MODE_PRIVATE).getString("currentUser", "")
 
-        val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                getString(R.string.dbFileName)
-            ).allowMainThreadQueries().build()
+        var currentUser = mgson.fromJson(json, UserInfo::class.java)
 
 
-        currentUserInfo = db.userDao().getUserInfos(username = currentUsername)
-        db.close()
+        binding.txtUsername.setText(currentUser.username)
+        binding.txtEmailaddress.setText((currentUser.email))
 
-
-
-
-        if (currentUserInfo.isNotEmpty()) {
-
-
-            binding.txtUsername.setText(currentUserInfo[0].username)
-            binding.txtEmailaddress.setText((currentUserInfo[0].email))
-
-        }
 
         val view = binding.root
         setContentView(view)
@@ -72,19 +57,9 @@ class ProfileActivity : AppCompatActivity() {
 
 
 
-            AsyncTask.execute {
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java,
-                    getString(R.string.dbFileName)
-                ).build()
-                val uuid = db.userDao().updateUser(userInfo)//.toInt()
-                db.close()
-
-
-                // Need to pop out account create success
-                // Check if username existed
-            }
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+            val uuid = db.userDao().updateUser(userInfo)
+            db.close()
             finish()
 
 

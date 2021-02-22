@@ -21,7 +21,7 @@ interface UserDao {
     fun getUid(username: String): Int
 
     @Query("SELECT * FROM userInfo WHERE username =  :username")
-    fun getUserInfos(username: String): List<UserInfo>
+    fun getUserInfo(username: String): UserInfo
 
 
     @Query("SELECT * FROM userInfo WHERE uid =  :uid")

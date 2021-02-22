@@ -3,6 +3,7 @@ package com.example.homework1.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 
 @Entity(tableName = "userInfo")
@@ -11,4 +12,4 @@ data class UserInfo(
     @ColumnInfo(name="username") var username:String,
     @ColumnInfo(name="email")  var email:String,
     @ColumnInfo(name="password") var password:String
-)
+): Serializable
