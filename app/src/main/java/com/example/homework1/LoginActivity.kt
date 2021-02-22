@@ -13,6 +13,10 @@ import androidx.room.Room
 import com.example.homework1.db.AppDatabase
 import com.example.homework1.databinding.ActivityLoginBinding
 import com.example.homework1.db.UserInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -43,17 +47,17 @@ class LoginActivity : AppCompatActivity() {
                 getString(R.string.sharedPreference),
                 Context.MODE_PRIVATE).edit().putInt("LoginStatus", 1).apply()
 
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
+                    var currentUserName = binding.txtUsername.text.toString()
+                    userInfos = db.userDao().getUserInfos(username = currentUserName)
+                }
+            }
 
-            val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java,
-                    getString(R.string.dbFileName)
-            ).allowMainThreadQueries().build()
 
                 // todo check if username exists
-            var currentUserName = binding.txtUsername.text.toString()
 
-            userInfos = db.userDao().getUserInfos(username = currentUserName)
 
 
 

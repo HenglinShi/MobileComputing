@@ -1,5 +1,6 @@
 package com.example.homework1
 
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -8,14 +9,17 @@ import android.widget.Toast
 import androidx.room.Room
 import com.example.homework1.db.AppDatabase
 import com.example.homework1.databinding.ActivityCreateReminderBinding
+import com.example.homework1.db.ReminderInfo
 import com.example.homework1.db.TaskInfo
+import com.example.homework1.db.UserInfo
+import java.time.LocalDateTime
 import java.util.*
 
 class CreateReminderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateReminderBinding
 
-
+    var currentUserInfo = listOf<UserInfo>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_create_reminder)
@@ -47,14 +51,40 @@ class CreateReminderActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val currentUsername = applicationContext.getSharedPreferences(
+                getString(R.string.sharedPreference),
+                Context.MODE_PRIVATE
+            ).getString("currentUsername", " ").toString()
+
+
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java,
+                getString(R.string.dbFileName)
+            ).allowMainThreadQueries().build()
+
+
+            currentUserInfo = db.userDao().getUserInfos(username = currentUsername)
+            db.close()
+
+
 
             // put the new item to the database
             // TODO CREATING THE NEW TASK OBJECT
-            val taksInfo = TaskInfo(
+
+            val reminder = ReminderInfo(
                 null,
-                taskname = binding.txtTaskName.text.toString(),
-                taskdesc = binding.txtTaskDesc.text.toString(),
-                duedate = binding.txtDate.text.toString()
+                //taskname = binding.txtTaskName.text.toString(),
+                //taskdesc = binding.txtTaskDesc.text.toString(),
+                //duedate = binding.txtDate.text.toString()
+                message = binding.txtTaskDesc.text.toString(),
+                creator_id = currentUserInfo[0].uid,
+                location_x = binding.txtLocationX.text.toString().toDouble(),
+                location_y = binding.txtLocationY.text.toString().toDouble(),
+                reminder_see = false,
+
+                creation_time = Calendar.getInstance().toString(),
+                reminder_time = binding.txtDate.text.toString()
             )
 
 
@@ -67,7 +97,7 @@ class CreateReminderActivity : AppCompatActivity() {
                 ).build()
                 // TODO
                 // TODO THE DATA INSERT
-                val uuid = db.taskDao().insert(taksInfo).toInt()
+                val uuid = db.reminderDao().insert(reminder).toInt()
                 db.close()
 
             }

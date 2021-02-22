@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.homework1.databinding.MessageItemBinding
+import com.example.homework1.db.ReminderInfo
 import com.example.homework1.db.TaskInfo
 
-class TaskInfoAdaptor (context: Context, private val list:List<TaskInfo>): BaseAdapter(){
+class TaskInfoAdaptor (context: Context, private val list:List<ReminderInfo>): BaseAdapter(){
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     override fun getView(position: Int, convertView: View?, container: ViewGroup?): View {
@@ -17,9 +18,10 @@ class TaskInfoAdaptor (context: Context, private val list:List<TaskInfo>): BaseA
 
         //val row = inflater.inflate(R.layout.payment_history_item, parent, false)
 
-        rowBinding.txtTaskName.text = list[position].taskname
-        rowBinding.txtTaskDesc.text = list[position].taskdesc
-        rowBinding.txtDueDate.text = list[position].duedate
+        rowBinding.txtTaskName.text = list[position].message
+        rowBinding.txtTaskDesc.text = list[position].message
+
+        rowBinding.txtDueDate.text = list[position].reminder_time
 
         return rowBinding.root
     }

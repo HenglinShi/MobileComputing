@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.room.Room
 import com.example.homework1.databinding.ActivityMainBinding
 import com.example.homework1.db.AppDatabase
+import com.example.homework1.db.ReminderInfo
 
 import com.example.homework1.db.TaskInfo
 
@@ -61,15 +62,15 @@ class MainActivity : AppCompatActivity() {
             // TODO task in detail
             // TODO MAYBE DO DELETION
 
-            val selectedTask = listView.adapter.getItem(position) as TaskInfo
+            val selectedTask = listView.adapter.getItem(position) as ReminderInfo
             val message =
-                "Do you want to delete ${selectedTask.taskname} payment, on ${selectedTask.duedate}?"
+                "Do you want to delete this reminder?"
 
             // Show AlertDialog to delete the reminder
             val builder = AlertDialog.Builder(this@MainActivity)
             builder.setTitle("Delete task?")
                 .setMessage(message)
-                .setPositiveButton("Delete") { _, _ ->
+                .setNegativeButton("Delete") { _, _ ->
                     // Update UI
 
                     //delete from database
@@ -81,14 +82,20 @@ class MainActivity : AppCompatActivity() {
                                 getString(R.string.dbFileName)
                             ).build()
 
-                        db.taskDao().delete(selectedTask.uid!!)
+                        db.reminderDao().delete(selectedTask.rid!!)
                     }
 
 
                     //refresh payments list
                     refreshListView()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setPositiveButton("Modify"){ _, _ ->
+                    var intent = Intent(this@MainActivity, ModifyReminderActivity::class.java)
+                    //var bundle = Bundle()
+                    intent.putExtra("reminder", selectedTask)
+                    startActivity(intent)
+                }
+                .setNeutralButton("Cancel") { dialog, _ ->
                     // Do nothing
                     dialog.dismiss()
                 }
@@ -109,25 +116,22 @@ class MainActivity : AppCompatActivity() {
         refreshTask.execute()
     }
 
-    inner class LoadTaskInfoEntries: AsyncTask<String?, String?, List<TaskInfo>>(){
-        override fun doInBackground(vararg params: String?) :List<TaskInfo> {
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java,
-                getString(R.string.dbFileName)
-            ).build()
+    inner class LoadTaskInfoEntries: AsyncTask<String?, String?, List<ReminderInfo>>(){
+        override fun doInBackground(vararg params: String?) :List<ReminderInfo> {
+            val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
 
-            val taskInfos = db.taskDao().getTaskInfos()
+
+            val reminders = db.reminderDao().getReminders()
             db.close()
-            return taskInfos
+            return reminders
 
         }
 
-        override fun onPostExecute(taskInfos: List<TaskInfo>?) {
-            super.onPostExecute(taskInfos)
-            if (taskInfos != null) {
-                if (taskInfos.isNotEmpty()) {
-                    val adaptor = TaskInfoAdaptor(applicationContext, taskInfos)
+        override fun onPostExecute(reminders: List<ReminderInfo>?) {
+            super.onPostExecute(reminders)
+            if (reminders != null) {
+                if (reminders.isNotEmpty()) {
+                    val adaptor = TaskInfoAdaptor(applicationContext, reminders)
                     listView.adapter = adaptor
                 } else {
                     listView.adapter = null
