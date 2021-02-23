@@ -2,4 +2,6 @@
     <string name="app_name">Homework1</string>
     <string name="dbFileName">com.example.homework1.3</string>
     <string name="sharedPreference" translatable="false">com.example.homework1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

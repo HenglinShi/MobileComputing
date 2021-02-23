@@ -18,10 +18,10 @@ class TaskInfoAdaptor (context: Context, private val list:List<ReminderInfo>): B
 
         //val row = inflater.inflate(R.layout.payment_history_item, parent, false)
 
-        rowBinding.txtTaskName.text = list[position].message
+        //rowBinding.txtTaskName.text = list[position].message
         rowBinding.txtTaskDesc.text = list[position].message
-
-        rowBinding.txtDueDate.text = list[position].reminder_time
+        rowBinding.txtCreateTime.text = list[position].creation_time
+        rowBinding.txtRemindDate.text = list[position].reminder_time
 
         return rowBinding.root
     }

@@ -10,7 +10,7 @@ import com.example.homework1.R
 @Database(entities = arrayOf(
    UserInfo::class,
    TaskInfo::class,
-   ReminderInfo::class), version = 1)
+   ReminderInfo::class), version = 3)
 
 abstract class AppDatabase:RoomDatabase() {
    abstract fun userDao():UserDao
@@ -30,7 +30,8 @@ abstract class AppDatabase:RoomDatabase() {
          synchronized(this) {
             val instance = Room.databaseBuilder(context,
                      AppDatabase::class.java,
-                     dbFileName).allowMainThreadQueries().build()
+                     dbFileName).allowMainThreadQueries().
+            fallbackToDestructiveMigration().build()
 
             INSTANCE = instance
             return instance

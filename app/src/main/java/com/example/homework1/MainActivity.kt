@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
                 .setPositiveButton("Modify"){ _, _ ->
                     var intent = Intent(this@MainActivity, ModifyReminderActivity::class.java)
-                    intent.putExtra("reminder", selectedTask)
+                    intent.putExtra("reminder", selectedTask.rid)
                     startActivity(intent)
                 }
 
