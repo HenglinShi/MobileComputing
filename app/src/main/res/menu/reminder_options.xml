@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_main_all_reminder"
+        android:title="All Reminder"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_main_past_reminder"
+        android:title="Past Reminder"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_main_future_reminder"
+        android:title="Future Reminder"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_main_locationed_reminder"
+        android:title="Has Locations"
+        app:showAsAction="never"/>
+
+
+    <item
+        android:id="@+id/menu_main_notLocationed_reminder"
+        android:title="Has no Locations"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_main_duedated_reminder"
+        android:title="Has Due Date"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_main_noDuedated_reminder"
+        android:title="Has no Due Date"
+        app:showAsAction="never"/>
+
+
+</menu>

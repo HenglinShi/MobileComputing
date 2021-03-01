@@ -39,7 +39,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         //dateString = dateString.split("/").toString()
 
         c.set(Calendar.YEAR, dateString[2].toInt());
-        c.set(Calendar.MONTH, dateString[0].toInt());
+        c.set(Calendar.MONTH, dateString[0].toInt()-1);
         c.set(Calendar.DAY_OF_MONTH, dateString[1].toInt());
         c.set(Calendar.HOUR_OF_DAY, hourOfDay)
         c.set(Calendar.MINUTE, minute)

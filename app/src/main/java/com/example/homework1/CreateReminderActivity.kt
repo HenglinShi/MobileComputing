@@ -2,6 +2,8 @@ package com.example.homework1
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -130,7 +132,7 @@ class CreateReminderActivity : AppCompatActivity() {
 
 
             val db = AppDatabase.getDatabase(applicationContext, getString(R.string.dbFileName))
-            db.reminderDao().insert(reminder).toInt()
+            var reminderId = db.reminderDao().insert(reminder).toInt()
             db.close()
 
 
@@ -139,9 +141,47 @@ class CreateReminderActivity : AppCompatActivity() {
                 "New task added.",
                 Toast.LENGTH_SHORT
             ).show()
+
+
+            //add reminder
+            //MM/dd/yyyy-HH:mm
+            val reminderDueTxt = reminder.reminder_time.split("-")//.toTypedArray()
+            val reminderDueDateTxt = reminderDueTxt[0].split("/").toTypedArray()
+            val reminderDueTimeTxt = reminderDueTxt[1].split(":").toTypedArray()
+
+
+            val reminderDueDate = GregorianCalendar(
+                    reminderDueDateTxt[2].toInt(),
+                    reminderDueDateTxt[1].toInt() - 1,
+                    reminderDueDateTxt[0].toInt(),
+                    reminderDueTimeTxt[0].toInt(),
+                    reminderDueTimeTxt[1].toInt()
+            )
+
+            if (reminderDueDate.timeInMillis > Calendar.getInstance().timeInMillis){
+
+                val message = reminder.message
+                MainActivity.setReminderWithWorkManager(
+                        applicationContext,
+                        reminderId,
+                        reminderDueDate.timeInMillis,
+                        message
+                )
+
+
+
+            }
+
+
+
             finish()
 
         }
+
+
+
+
+
 
 
 

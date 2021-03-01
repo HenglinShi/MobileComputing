@@ -20,6 +20,21 @@ interface ReminderDao {
     @Query("SELECT * FROM reminderInfo")
     fun getReminders(): List<ReminderInfo>
 
+    @Query("SELECT * FROM reminderInfo WHERE (creation_time >= :today)")
+    fun getRemindersAfterToday(today:String): List<ReminderInfo>
+
+    @Query("SELECT * FROM reminderInfo WHERE (creation_time <= :today)")
+    fun getRemindersBeforeToday(today:String): List<ReminderInfo>
+
+    @Query("SELECT * FROM reminderInfo WHERE (reminder_see == :tt)")
+    fun getRemindersReminded(tt:Boolean): List<ReminderInfo>
+
+    @Query("SELECT * FROM reminderInfo WHERE (location_x is not null)")
+    fun getRemindersHasLoc(): List<ReminderInfo>
+
+    @Query("SELECT * FROM reminderInfo WHERE (location_x is null)")
+    fun getRemindersNoLoc(): List<ReminderInfo>
+
     @Update
     fun updateReminder(reminderInfo: ReminderInfo) : Int
 
