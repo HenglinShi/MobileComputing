@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">reminderapp</string>
+    <string name="dbFileName">fi.oulu.hshi.reminderapp1</string>
+    <string name="sharedPreference" translatable="false">fi.oulu.hshi.reminderapp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps2">Map2</string>
+</resources>

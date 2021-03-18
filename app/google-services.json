@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "204814787044",
+    "project_id": "quickstart-1614018505516",
+    "storage_bucket": "quickstart-1614018505516.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204814787044:android:b68d10a6ff7b13ee5327f1",
+        "android_client_info": {
+          "package_name": "fi.oulu.hshi.reminderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204814787044-3jctjld20e87cgjne0i6rt84rmmftdvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHy_ahQ-dkrvgBaeb6yV65h-s_zdhbVNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204814787044-3jctjld20e87cgjne0i6rt84rmmftdvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

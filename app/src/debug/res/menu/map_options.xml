@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/OptMapNormal"
+        android:title="Normal map"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/optMapHybrid"
+        android:title="Hybrid map"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/optMapSatel"
+        android:title="Satellite map"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/optMapTerrain"
+        android:title="Terrain map"
+        app:showAsAction="never"/>
+
+
+
+
+</menu>
